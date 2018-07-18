@@ -1,0 +1,23 @@
+{
+  "name": "wksin",
+  "version": "1.0.0",
+  "description": "基于Nodejs的前端脚手架",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/homels-kong/wksin.git"
+  },
+  "author": "362381574@qq.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/homels-kong/wksin/issues"
+  },
+  "homepage": "https://github.com/homels-kong/wksin#readme"
+}
