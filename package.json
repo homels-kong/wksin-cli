@@ -1,17 +1,22 @@
 {
   "name": "wksin",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "基于Nodejs的前端脚手架",
   "main": "index.js",
   "directories": {
     "lib": "lib",
     "test": "test"
   },
-  "keywords":[
+  "bin": {
+    "wksin": "./bin/wksin-cli.js"
+  },
+  "keywords": [
     "nodejs",
     "vue",
     "vuex",
-    "vue-router"
+    "vue-router",
+    "cli",
+    "pwa"
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -25,5 +30,9 @@
   "bugs": {
     "url": "https://github.com/homels-kong/wksin/issues"
   },
-  "homepage": "https://github.com/homels-kong/wksin#readme"
+  "homepage": "https://github.com/homels-kong/wksin#readme",
+  "dependencies": {
+    "chalk": "^2.4.1",
+    "ora": "^3.0.0"
+  }
 }
