@@ -1,6 +1,6 @@
 {
   "name": "wksin",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "基于Nodejs的前端脚手架",
   "main": "index.js",
   "directories": {
@@ -8,7 +8,7 @@
     "test": "test"
   },
   "bin": {
-    "wksin": "./bin/wksin-cli.js"
+    "wksin": "./bin/wksin"
   },
   "keywords": [
     "nodejs",
@@ -33,6 +33,7 @@
   "homepage": "https://github.com/homels-kong/wksin#readme",
   "dependencies": {
     "chalk": "^2.4.1",
+    "commander": "^2.16.0",
     "ora": "^3.0.0"
   }
 }

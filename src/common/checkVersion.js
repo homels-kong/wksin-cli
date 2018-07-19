@@ -12,7 +12,7 @@ module.exports = {
         let packageInfo = await axios.get(WKSIN_NPM_REGISTRY);
         if (packageInfo) {
             let lastVersion = packageInfo.data['dist-tags'].latest;
-            console.log(chalk.blue(`当前wksin最新版本号为${lastVersion},请及时更新`))
+            console.log(chalk.green(`当前wksin最新版本号为${lastVersion},请及时更新`))
         } else {
         }
     }
