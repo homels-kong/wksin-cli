@@ -1,6 +1,6 @@
 {
   "name": "wksin",
-  "version": "1.0.3",
+  "version": "1.0.5",
   "description": "基于Nodejs的前端脚手架",
   "main": "index.js",
   "directories": {
@@ -32,8 +32,10 @@
   },
   "homepage": "https://github.com/homels-kong/wksin#readme",
   "dependencies": {
+    "axios": "^0.18.0",
     "chalk": "^2.4.1",
     "commander": "^2.16.0",
+    "inquirer": "^6.0.0",
     "ora": "^3.0.0"
   }
 }

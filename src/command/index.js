@@ -22,7 +22,7 @@ checkVersion().then(async () => {
     program
         .command('build')
         .description('构建生产环境 wksin 项目')
-        .alias('i')
+        .alias('b')
         .action(() => {
             require('../build')
         })
