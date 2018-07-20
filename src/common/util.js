@@ -4,7 +4,7 @@
 const axios = require('axios');
 const ora = require('ora');
 const Log = require('../common/log');
-const shelljs = require('shelljs');
+const shell = require('shelljs');
 const dns = require('dns');
 const { WKSIN_NPM_REGISTRY } = require('../config/global');
 
@@ -25,14 +25,8 @@ module.exports = {
     /**
      * 检查是否支持命令
      */
-    hasCommand: async commandName => {
-        return shelljs.whitch(commandName)
-    },
-    /**
-     * 本机是否安装了Git
-     */
-    checkGitInstalled: async () => {
-        return this.hasCommand('git')
+    hasCommand: async (commandName) => {
+        return shell.which(commandName)
     },
     /**
      * 检查是否联网, 我们测网速通常都是访问百度服务器吧，哈哈
