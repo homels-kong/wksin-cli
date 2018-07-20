@@ -1,13 +1,13 @@
 'use strict'
-let { checkVersion } = require('../common/checkVersion')
+const { checkVersion, checkGitInstalled, isOnline } = require('../common/util');
+const program = require('commander');
+const LOG = require('../common/log');
 
 process.env.NODE_PATH = __dirname + '/../node_modules/'
 
-const program = require('commander')
-
-checkVersion().then(async () => {
+isOnline().then(() => { 
     program
-    .version(require('../../package').version )
+        .version(require('../../package').version )
 
     program
         .usage('<command>')
@@ -32,4 +32,6 @@ checkVersion().then(async () => {
     if(!program.args.length){
         program.help()
     }
+}, () => {
+    LOG.error('错误提示：使用wksin初始化项目必须在有网络状态下')
 })
