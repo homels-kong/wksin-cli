@@ -2,6 +2,8 @@
  * log打印的封装
  * 
  */
+const chalk = require('chalk');
+
 class Log {
     /**
      * 打印空格
@@ -17,6 +19,9 @@ class Log {
     }
     info (msg) {
         console.log(msg)
+    }
+    warn (msg) {
+        console.log(chalk.yellow(msg))
     }
 }
 
