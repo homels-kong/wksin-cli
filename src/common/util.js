@@ -6,7 +6,8 @@ const shell = require('shelljs');
 const dns = require('dns');
 const fs = require('fs');
 const efs = require('fs-extra');
-const { WKSIN_NPM_REGISTRY } = require('../config/global');
+const path = require('path');
+const { WKSIN_NPM_REGISTRY, WEBPACK_DEFAULT_CONFIG } = require('../config/global');
 
 /**
  * 删除指定目录文件
@@ -96,6 +97,19 @@ const tools = {
         } catch (e) {
             throw new Error(e);
         }
+    },
+    /**
+     * 获取项目默认生成的webpack配置文件
+     */
+    getWebpackConfig: async (cwd) => {
+       let defaultConfig = null
+       let filePath = path.resolve(cwd, './' + WEBPACK_DEFAULT_CONFIG)
+
+       if (fs.existsSync(filePath)) {
+           defaultConfig = require(filePath)
+       }
+
+       return defaultConfig;
     }
 }
 

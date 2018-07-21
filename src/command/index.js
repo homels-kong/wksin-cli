@@ -26,6 +26,14 @@ isOnline().then(() => {
         .action(() => {
             require('../build')
         })
+    
+    program
+        .command('start')
+        .description('启动本地 wksin 项目')
+        .alias('s')
+        .action(() => {
+            require('../build/app')
+        })
 
     program.parse(process.argv)
 

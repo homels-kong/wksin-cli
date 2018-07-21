@@ -20,6 +20,11 @@ exports.WKSIN_TEMPLATE_MOBILE_GIT = `https://github.com/homels-kong/wksin-core-p
 exports.WKSIN_NPM_REGISTRY = 'http://registry.npmjs.org/wksin';
 
 /**
+ * 项目默认的webpack配置文件
+ */
+exports.WEBPACK_DEFAULT_CONFIG = 'wksin.config.js';
+
+/**
  * 获取Git配置
  */
 async function getGitConfig(){

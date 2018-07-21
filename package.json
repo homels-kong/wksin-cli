@@ -1,6 +1,6 @@
 {
   "name": "wksin",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "基于Nodejs的前端脚手架,通过Json配置快速生成SPA项目",
   "main": "index.js",
   "directories": {
@@ -40,6 +40,7 @@
     "inquirer": "^6.0.0",
     "mz": "^2.7.0",
     "ora": "^3.0.0",
-    "shelljs": "^0.8.2"
+    "shelljs": "^0.8.2",
+    "webpack": "^4.16.1"
   }
 }
