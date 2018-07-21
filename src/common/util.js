@@ -1,14 +1,36 @@
-/**
- * 公共类库
- */
+
 const axios = require('axios');
 const ora = require('ora');
 const Log = require('../common/log');
 const shell = require('shelljs');
 const dns = require('dns');
+const fs = require('fs');
 const { WKSIN_NPM_REGISTRY } = require('../config/global');
 
-module.exports = {
+/**
+ * 删除指定目录文件
+ * 
+ * @param {String} path 
+ */
+async function deleteFiles(path) {
+    let files = [];
+
+    if (fs.existsSync(path)) {
+        files = fs.readdirSync(path);
+        files.forEach((file, index) => {
+            let curPath = path + "/" + file;
+            if (fs.statSync(curPath).isDirectory()) {
+                deleteFiles(curPath);
+            } else {
+                fs.unlinkSync(curPath);
+            }
+        });
+
+        fs.rmdirSync(path);
+    }
+}
+
+const tools = {
     /**
      * 检查wksin线上版本
      */
@@ -47,5 +69,19 @@ module.exports = {
                 }
             })
         })
+    },
+    /**
+     * 判断指定路径是否存在
+     */
+    fsExists: async path => {
+        return await fs.existsSync(path)
+    },
+    /**
+     * 删除指定路径文件
+     */
+    deleteFiles: async path => {
+        deleteFiles(path);
     }
 }
+
+module.exports = tools

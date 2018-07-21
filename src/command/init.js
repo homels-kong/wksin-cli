@@ -1,7 +1,7 @@
 'use strict'
 
-const { WKSIN_TEMPLATE_PC_GIT, WKSIN_TEMPLATE_MOBILE_GIT, getQuestionList} = require('../config/global');
-const { checkVersion, hasCommand } = require('../common/util');
+const { WKSIN_TEMPLATE_PC_GIT, WKSIN_TEMPLATE_MOBILE_GIT, getQuestionList, getCoverList } = require('../config/global');
+const { checkVersion, hasCommand, fsExists, deleteFiles } = require('../common/util');
 const { exec } = require('mz/child_process');
 const ora = require('ora'); 
 const inquirer = require('inquirer');
@@ -27,15 +27,22 @@ class ProjectInit {
     /**
      * 获取问题列表
      */
-    async getQuestions () {
+    async prompQuestions () {
         const QUESTION_LIST = await getQuestionList();
         return await inquirer.prompt(QUESTION_LIST);
+    }
+    /**
+     * 是否覆盖原有项目
+     */
+    async prompCover () {
+        const COVER_LIST = await getCoverList();
+        return await inquirer.prompt(COVER_LIST);
     }
     /**
      * 从Git服务器上拉取模版
      */
     async downProjectFromGit () {
-        let anwers = await this.getQuestions();
+        let anwers = await this.prompQuestions();
         if (anwers && anwers.templateName) {
             Log.space(2);
 
@@ -43,9 +50,20 @@ class ProjectInit {
             delete anwers['templateName'];
             this.packageConfig = anwers;
             
+            /**
+             * 如果当前目录下存在项目，则提示是否覆盖
+             */
+            let exists = await fsExists(`./${anwers.name}`);
+            if (exists) {
+                let coverAnswer = await this.prompCover();
+                if (coverAnswer && coverAnswer.isCover) {
+                    await deleteFiles(`./${anwers.name}`)
+                }
+            }
+
             this.spinner = ora({
                 spinner: 'dots',
-                text: `开始下载 ${ this.templateName} 框架模版，请耐心等待......`
+                text: `开始下载 ${this.templateName} 框架模版，请耐心等待......`
             });
             this.spinner.start();
 

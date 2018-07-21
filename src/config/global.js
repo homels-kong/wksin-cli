@@ -4,16 +4,24 @@
 const { execSync } = require('child_process');
 const LOG = require('../common/log')
 
-// PC模版git仓库地址
+/**
+ * PC模版git仓库地址
+ */
 exports.WKSIN_TEMPLATE_PC_GIT = `https://github.com/homels-kong/wksin-core-pc.git`;
 
-// H5模版git仓库地址
+/**
+ * H5模版git仓库地址
+ */
 exports.WKSIN_TEMPLATE_MOBILE_GIT = `https://github.com/homels-kong/wksin-core-pc.git`;
 
-// 本项目的npm包地址
+/**
+ * 本项目的npm包地址
+ */
 exports.WKSIN_NPM_REGISTRY = 'http://registry.npmjs.org/wksin';
 
-// 获取Git配置
+/**
+ * 获取Git配置
+ */
 async function getGitConfig(){
     let gitInfo = {
         author: 'xxx',
@@ -34,7 +42,9 @@ async function getGitConfig(){
     return gitInfo;
 }
 
-// 获取问题列表
+/**
+ * 获取问题列表
+ */
 exports.getQuestionList = async () => {
     let gitInfo = await getGitConfig();
     return [
@@ -68,3 +78,17 @@ exports.getQuestionList = async () => {
         }
     ]
 }
+/**
+ * 获取是否覆盖提问列表
+ */
+exports.getCoverList = async () => {
+    return [{
+        'type': 'list',
+        'name': 'isCover',
+        'message': '是否覆盖已有项目？',
+        'choices': ['y', 'n'],
+        'default': 'y',
+        'pageSize': 1000
+    }]
+}
+
