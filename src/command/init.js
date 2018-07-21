@@ -1,7 +1,7 @@
 'use strict'
 
 const { WKSIN_TEMPLATE_PC_GIT, WKSIN_TEMPLATE_MOBILE_GIT, getQuestionList, getCoverList } = require('../config/global');
-const { checkVersion, hasCommand, fsExists, deleteFiles } = require('../common/util');
+const { checkVersion, hasCommand, fsExists, deleteFiles, copyFiles } = require('../common/util');
 const { exec } = require('mz/child_process');
 const ora = require('ora'); 
 const inquirer = require('inquirer');
@@ -11,8 +11,13 @@ class ProjectInit {
     constructor () {
         this.init();
         this.templateName = '';
+        this.projectName = '';
         this.packageConfig = {};
         this.spinner = ora();
+        /**
+         * 模版先下载到临时目录
+         */
+        this.tempPath = '.temp';
     }
     async init () {
         let gitInstalled = await hasCommand('git');
@@ -47,17 +52,20 @@ class ProjectInit {
             Log.space(2);
 
             this.templateName = anwers.templateName;
+            this.projectName = anwers.name;
             delete anwers['templateName'];
             this.packageConfig = anwers;
             
             /**
              * 如果当前目录下存在项目，则提示是否覆盖
              */
-            let exists = await fsExists(`./${anwers.name}`);
+            let exists = await fsExists(`./${this.projectName}`);
             if (exists) {
                 let coverAnswer = await this.prompCover();
-                if (coverAnswer && coverAnswer.isCover) {
-                    await deleteFiles(`./${anwers.name}`)
+                if (coverAnswer && coverAnswer.isCover === 'y') {
+                    await deleteFiles(`./${this.projectName}`)
+                } else {
+                    this.projectName = anwers.name + '-bak'
                 }
             }
 
@@ -70,17 +78,23 @@ class ProjectInit {
             let sourceURL = this.templateName.toLowerCase() === 'pc' ? WKSIN_TEMPLATE_PC_GIT : WKSIN_TEMPLATE_MOBILE_GIT;
             if (sourceURL) {
                 try {
-                    let result = await exec(`git clone ${sourceURL} ${anwers.name}`);
+                    fsExists(this.tempPath) && deleteFiles(this.tempPath)
+
+                    let result = await exec(`git clone ${sourceURL} ${this.tempPath}`);
                     if (result) {
+
+                        /**
+                         * 模版拷贝到真正目录
+                         */
+                        await copyFiles(this.tempPath, this.projectName)
+                        await deleteFiles(this.tempPath)
+
                         this.spinner.stop();
                         Log.info('模版下载成功，执行以下命令启动程序：');
-                        Log.info(`
-                           cd ${anwers.name}
-                           npm install
-                           npm run start
-                        `)
+                        Log.info(' cd ' + this.projectName + ' \n npm install \n npm run start')
                     }
                 } catch (e) {
+                    console.log(e)
                     this.spinner.stop();
                     Log.error('错误提示：模版下载失败，联系开发者（362381574@qq.com）')
                 }

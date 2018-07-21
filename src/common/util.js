@@ -5,6 +5,7 @@ const Log = require('../common/log');
 const shell = require('shelljs');
 const dns = require('dns');
 const fs = require('fs');
+const efs = require('fs-extra');
 const { WKSIN_NPM_REGISTRY } = require('../config/global');
 
 /**
@@ -81,6 +82,20 @@ const tools = {
      */
     deleteFiles: async path => {
         deleteFiles(path);
+    },
+    /**
+     * 复制指定文件目录
+     */
+    copyFiles: async (fromPath, toPath) => {
+        try {
+            if (!fs.existsSync(toPath)) {
+                await fs.mkdirSync(toPath)
+            }
+
+            return await efs.copySync(fromPath, toPath)
+        } catch (e) {
+            throw new Error(e);
+        }
     }
 }
 
