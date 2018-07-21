@@ -1,7 +1,7 @@
 {
   "name": "wksin",
-  "version": "1.0.5",
-  "description": "基于Nodejs的前端脚手架",
+  "version": "1.0.6",
+  "description": "基于Nodejs的前端脚手架,通过Json配置快速生成SPA项目",
   "main": "index.js",
   "directories": {
     "lib": "lib",
@@ -37,6 +37,7 @@
     "commander": "^2.16.0",
     "dns": "^0.2.2",
     "inquirer": "^6.0.0",
+    "mz": "^2.7.0",
     "ora": "^3.0.0",
     "shelljs": "^0.8.2"
   }

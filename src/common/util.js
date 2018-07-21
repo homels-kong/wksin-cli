@@ -13,11 +13,17 @@ module.exports = {
      * 检查wksin线上版本
      */
     checkVersion: async () => {
+        let spinner = ora().start();
+        spinner.color = 'red';
+        spinner.text = '正在检查线上 wksin 包版本号.....'
+
         let packageInfo = await axios.get(WKSIN_NPM_REGISTRY);
+
+        spinner.stop();
         if (packageInfo) {
             let lastVersion = packageInfo.data['dist-tags'].latest;
 
-            Log.info(`当前wksin最新版本号为${lastVersion},请及时更新`)
+            Log.info(`当前 wksin 最新版本号为 ${lastVersion},请及时更新`)
             Log.info('欢迎使用 wksin 前端解决方案')
             Log.space(2)
         } else {}
