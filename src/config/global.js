@@ -25,6 +25,10 @@ exports.WKSIN_NPM_REGISTRY = 'http://registry.npmjs.org/wksin';
 exports.WEBPACK_DEFAULT_CONFIG = 'wksin.config.js';
 
 /**
+ * 
+ */
+exports.PROJECT_PACKAGE_JSON = 'package.json'
+/**
  * 获取Git配置
  */
 async function getGitConfig(){
@@ -73,12 +77,12 @@ exports.getQuestionList = async () => {
         }, {
             'type': 'input',
             'name': 'email',
-            'message': '请输入email',
+            'message': '请输入email：',
             'default': gitInfo.email
         }, {
             'type': 'input',
             'name': 'description',
-            'message': '请输入项目描述',
+            'message': '请输入项目描述：',
             'default': ''
         }
     ]

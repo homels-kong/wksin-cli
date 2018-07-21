@@ -1,7 +1,7 @@
 'use strict'
 
-const { WKSIN_TEMPLATE_PC_GIT, WKSIN_TEMPLATE_MOBILE_GIT, getQuestionList, getCoverList } = require('../config/global');
-const { checkVersion, hasCommand, fsExists, deleteFiles, copyFiles } = require('../common/util');
+const { WKSIN_TEMPLATE_PC_GIT, WKSIN_TEMPLATE_MOBILE_GIT, PROJECT_PACKAGE_JSON, getQuestionList, getCoverList } = require('../config/global');
+const { checkVersion, hasCommand, fsExists, deleteFiles, copyFiles, mergePackageJson } = require('../common/util');
 const { exec } = require('mz/child_process');
 const ora = require('ora'); 
 const inquirer = require('inquirer');
@@ -42,6 +42,12 @@ class ProjectInit {
     async prompCover () {
         const COVER_LIST = await getCoverList();
         return await inquirer.prompt(COVER_LIST);
+    }
+    /**
+     * 回填用户init时填的参数
+     */
+    async mergePackageInfo () {
+        return await mergePackageJson(process.cwd(), this.projectName, this.packageConfig)
     }
     /**
      * 从Git服务器上拉取模版
@@ -86,8 +92,15 @@ class ProjectInit {
                         /**
                          * 模版拷贝到真正目录
                          */
-                        await copyFiles(this.tempPath, this.projectName)
-                        await deleteFiles(this.tempPath)
+                        await copyFiles(this.tempPath, this.projectName);
+                        /**
+                         * 删除临时目录
+                         */
+                        await deleteFiles(this.tempPath);
+                        /**
+                         * 回填package.json信息
+                         */
+                        await this.mergePackageInfo();
 
                         this.spinner.stop();
                         Log.info('模版下载成功，执行以下命令启动程序：');

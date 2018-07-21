@@ -1,4 +1,3 @@
-
 const axios = require('axios');
 const ora = require('ora');
 const Log = require('../common/log');
@@ -7,7 +6,8 @@ const dns = require('dns');
 const fs = require('fs');
 const efs = require('fs-extra');
 const path = require('path');
-const { WKSIN_NPM_REGISTRY, WEBPACK_DEFAULT_CONFIG } = require('../config/global');
+const _ = require('lodash');
+const { WKSIN_NPM_REGISTRY, WEBPACK_DEFAULT_CONFIG, PROJECT_PACKAGE_JSON } = require('../config/global');
 
 /**
  * 删除指定目录文件
@@ -110,6 +110,26 @@ const tools = {
        }
 
        return defaultConfig;
+    },
+    /**
+     * 合并package.json信息
+     */
+    mergePackageJson: async (cwd, projectName, answers) => {
+        let filePath = path.resolve(cwd, `./${projectName}/` + PROJECT_PACKAGE_JSON);
+        let packageInfo = null;
+
+        if (fs.existsSync(filePath)) {
+            packageInfo = require(filePath);
+            if (packageInfo) {
+                packageInfo = _.merge(packageInfo, answers);
+                try {
+                    let str = JSON.stringify(packageInfo, null, 4);
+                    await efs.writeFileSync(filePath, str)
+                } catch (e) {
+                    throw new Error(e)
+                }
+            }
+        }
     }
 }
 
