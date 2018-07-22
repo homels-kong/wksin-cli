@@ -4,7 +4,7 @@ let path = require('path');
 let _ = require('lodash');
 const { getWebpackConfig } = require('../common/util');
 const { getLoaders, getResolveLoader} = require('./webpack.base');
-const webpackPlugins = require('./webpack.plugin')
+const { getWebpackPlugin } = require('./webpack.plugin')
 
 let defaultConfig = {
     mode: 'development',
@@ -16,7 +16,7 @@ let defaultConfig = {
      * 编译之后的输出文件
      */
     output: {
-        filename: 'js/[name].js',
+        filename: 'js/[name].[chunkhash:8].js',
         path: path.resolve(cwd, './dist'),
         /**
          * 静态资源前缀
@@ -32,7 +32,7 @@ let defaultConfig = {
     /**
      * 插件配置
      */
-    plugins: webpackPlugins,
+    plugins: [],
     /**
      * 脚手架编译项目的话，这儿可能是坑
      */
@@ -44,8 +44,13 @@ let defaultConfig = {
 async function mergeWebpackConfig() {
     try {
         let projectWebpackConfig = await getWebpackConfig(cwd);
+        let plugins = getWebpackPlugin(projectWebpackConfig);
+
+        if (plugins) {
+            defaultConfig.plugins = plugins;
+        }
         if (projectWebpackConfig) {
-            return _.merge(defaultConfig, projectWebpackConfig)
+            return _.merge(defaultConfig, projectWebpackConfig.webpackBase)
         }
         return defaultConfig;
     } catch (e) {
