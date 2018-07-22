@@ -6,6 +6,8 @@ const { getWebpackConfig } = require('../common/util');
 const { getLoaders, getResolveLoader} = require('./webpack.base');
 const { getWebpackPlugin } = require('./webpack.plugin')
 
+const hotModuleJs = 'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=10000&reload=true'
+
 let defaultConfig = {
     mode: 'development',
     /**
@@ -36,7 +38,15 @@ let defaultConfig = {
     /**
      * 脚手架编译项目的话，这儿可能是坑
      */
-    resolveLoader: getResolveLoader()
+    resolveLoader: getResolveLoader(),
+    /**
+     * 根目录为@
+     */
+    resolve: {
+        alias: {
+            '@': path.resolve(__dirname, './')
+        },
+    },
 };
 /**
  * 合并项目与默认的webapcck配置
@@ -50,6 +60,18 @@ async function mergeWebpackConfig() {
             defaultConfig.plugins = plugins;
         }
         if (projectWebpackConfig) {
+            Object.keys(projectWebpackConfig.webpackBase.entry || {}).forEach(key => {
+                if (Array.isArray(projectWebpackConfig.webpackBase.entry[key])) {
+                    projectWebpackConfig.webpackBase.entry[key] = projectWebpackConfig.webpackBase.entry[key].concat(
+                        [hotModuleJs]
+                    )
+                } else {
+                    projectWebpackConfig.webpackBase.entry[key] = [projectWebpackConfig.webpackBase.entry[key]].concat(
+                        [hotModuleJs]
+                    )
+                }
+            })
+
             return _.merge(defaultConfig, projectWebpackConfig.webpackBase)
         }
         return defaultConfig;

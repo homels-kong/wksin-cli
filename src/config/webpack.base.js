@@ -3,6 +3,7 @@
  */
 
 const path = require('path');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 /**
  * webpack打包默认的loader
@@ -20,8 +21,9 @@ exports.getLoaders = function () {
         {
           test: /\.css$/,
           use: [
-            'css-loader'
-          ]
+    　　  　　  MiniCssExtractPlugin.loader,
+    　　 　　   "css-loader"
+    　　   ]
         }
       ]
  } 

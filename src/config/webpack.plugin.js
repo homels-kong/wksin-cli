@@ -5,6 +5,7 @@ const path = require('path');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const WebpackHotMiddleware = require('webpack-hot-middleware');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const webpack = require('webpack');
 
 let cwd = process.cwd();
@@ -13,6 +14,9 @@ let plusgins = [
     new VueLoaderPlugin(),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
+    new MiniCssExtractPlugin({
+        filename: 'css/[name].[hash].css'
+    })
 ]
 
 /**
@@ -20,6 +24,7 @@ let plusgins = [
  * @param {Object} webpackConfig 
  */
 exports.getWebpackPlugin = (webpackConfig) => {
+
     if (webpackConfig && webpackConfig.webpackPlugin) {
         if (webpackConfig.webpackPlugin.templatePath) {
             let templatePath = webpackConfig.webpackPlugin.templatePath;
