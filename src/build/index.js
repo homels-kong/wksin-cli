@@ -20,7 +20,7 @@ class Runtime {
 
         Log.info('[wksin] 读取配置文件成功');
         Log.info('[wksin] 开始构建项目');
-        this.spinner = ora('[wksin] 正在构建构......').start()
+        this.spinner = ora('[wksin] 正在构建......').start()
         this.complier = webpack(this.config);
 
         this.complier.run((err, stats) => {
