@@ -10,7 +10,9 @@ const webpack = require('webpack');
 let cwd = process.cwd();
 
 let plusgins = [
-    new VueLoaderPlugin()
+    new VueLoaderPlugin(),
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.NoEmitOnErrorsPlugin(),
 ]
 
 /**

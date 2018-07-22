@@ -16,7 +16,7 @@ let defaultConfig = {
      * 编译之后的输出文件
      */
     output: {
-        filename: 'js/[name].[chunkhash:8].js',
+        filename: 'js/[name].[hash].js',
         path: path.resolve(cwd, './dist'),
         /**
          * 静态资源前缀

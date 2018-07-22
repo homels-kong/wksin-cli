@@ -1,6 +1,7 @@
 
 const Runtime = require('./index');
 const devMiddleware = require('webpack-dev-middleware');
+const webpackHotMiddleware = require("webpack-hot-middleware")
 const express = require('express');
 const app = express();
 const Log = require('../common/log');
@@ -33,8 +34,11 @@ class WksinCore {
             let devMiddlewareIntance = devMiddleware(complier, {
                 publicPath: complier.options.output.publicPath,
                 noInfo: true,
-                stats: false,
-                logLevel: 'info'
+                stats: {
+                    colors: true
+                },
+                hot: true,
+                logLevel: 'trace'
             });
             /**
              * 执行中间件
@@ -47,6 +51,14 @@ class WksinCore {
                 Log.info('[wksin] App热启动成功');
                 Log.warn('[wksin] 开始监控文件变化......')
             })
+            
+            /**
+             * 热启动
+             */
+            app.use(webpackHotMiddleware(complier, {
+                log: console.log,
+                heartbeat: 10 * 1000
+            }));
 
             app.listen(3000, () => console.log('App listening on port 3000!'))
         }
