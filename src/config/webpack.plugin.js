@@ -4,6 +4,8 @@
 const path = require('path');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const WebpackHotMiddleware = require('webpack-hot-middleware');
+const webpack = require('webpack');
 
 let cwd = process.cwd();
 

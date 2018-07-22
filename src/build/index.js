@@ -6,7 +6,6 @@ const ora = require('ora');
 
 class Runtime {
     constructor () {
-        this.run();
         this.watching = null;
         this.spinner = null;
     }
@@ -14,40 +13,46 @@ class Runtime {
      * 运行webpack
      */
     async run () {
+        let self = this;
         Log.info('[wksin] 开始读取配置文件');
 
         this.config = await webpackDefaultConfig();
 
         Log.info('[wksin] 读取配置文件成功');
         Log.info('[wksin] 开始构建项目');
+
         this.spinner = ora('[wksin] 正在构建......').start()
         this.complier = webpack(this.config);
 
-        this.complier.run((err, stats) => {
-            this.spinner.stop();
-            if (err) {
-                if (err.details) {
-                    Log.error(err.details);
+        return new Promise((resove, reject) => {
+            self.complier.run((err, stats) => {
+                self.spinner.stop();
+                if (err) {
+                    if (err.details) {
+                        Log.error(err.details);
+                    }
+                    return;
                 }
-                return;
-            }
-        
-            const info = stats.toJson();
-        
-            if (stats.hasErrors()) {
-                Log.error(info.errors);
-            }
-        
-            if (stats.hasWarnings()) {
-                Log.warn(info.warnings);
-            }
-
-            if (!err && !stats.hasErrors()) {
-                Log.info('[wksin] 项目构建完成');
-            }
-        });
-
-        this.watch();
+            
+                const info = stats.toJson();
+            
+                if (stats.hasErrors()) {
+                    Log.error(info.errors);
+                }
+            
+                if (stats.hasWarnings()) {
+                    Log.warn(info.warnings);
+                }
+    
+                if (!err && !stats.hasErrors()) {
+                    resove(self.complier);
+                    // self.watch();
+                    Log.info('[wksin] 项目构建完成');
+                } else {
+                    reject();
+                }
+            });
+        })
     }
     /**
      * 监听webpack
@@ -79,10 +84,24 @@ class Runtime {
      * 关闭监听webpack
      */
     async close () {
-        watching.close(() => {
+        this.watching.close(() => {
             Log.info('关闭 Webpack 监听......')
         });
     }
+    /**
+     * 获取单个webpack实例
+     */
+    async getComplier () {
+        this.config = await webpackDefaultConfig();
+        return webpack(this.config);
+    }
+    /**
+     * 重启编译
+     */
+    async rebuild () {
+        this.close();
+        return this.run();
+    }
 }
 
-module.exports = new Runtime()
+module.exports = Runtime

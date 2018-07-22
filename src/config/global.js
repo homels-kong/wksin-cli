@@ -25,7 +25,7 @@ exports.WKSIN_NPM_REGISTRY = 'http://registry.npmjs.org/wksin';
 exports.WEBPACK_DEFAULT_CONFIG = 'wksin.config.js';
 
 /**
- * 
+ * 项目根目录package
  */
 exports.PROJECT_PACKAGE_JSON = 'package.json'
 /**

@@ -24,7 +24,8 @@ isOnline().then(() => {
         .description('构建生产环境 wksin 项目')
         .alias('b')
         .action(() => {
-            require('../build')
+           let Runtime = require('../build');
+           new Runtime().run();
         })
     
     program
