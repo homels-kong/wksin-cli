@@ -1,3 +1,9 @@
+/**
+ * cli入口文件
+ * 
+ * author: wukong
+ */
+
 'use strict'
 const { checkVersion, checkGitInstalled, isOnline } = require('../common/util');
 const program = require('commander');

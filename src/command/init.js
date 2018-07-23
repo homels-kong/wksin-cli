@@ -1,5 +1,10 @@
-'use strict'
+/**
+ * 初始化项目
+ * 
+ * author: wukong
+ */
 
+'use strict'
 const { WKSIN_TEMPLATE_PC_GIT, WKSIN_TEMPLATE_MOBILE_GIT, PROJECT_PACKAGE_JSON, getQuestionList, getCoverList } = require('../config/global');
 const { checkVersion, hasCommand, fsExists, deleteFiles, copyFiles, mergePackageJson } = require('../common/util');
 const { exec } = require('mz/child_process');

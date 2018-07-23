@@ -1,5 +1,7 @@
 /**
  * webpack基本配置
+ * 
+ * author: wukong
  */
 
 const path = require('path');

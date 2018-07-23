@@ -1,5 +1,7 @@
 /**
  * 对外暴露的方法
+ * 
+ * author: wukong
  */
 
 const runtime = require('./build/index');

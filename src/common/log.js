@@ -1,7 +1,9 @@
 /**
  * log打印的封装
  * 
+ * author: wukong
  */
+
 const chalk = require('chalk');
 
 class Log {

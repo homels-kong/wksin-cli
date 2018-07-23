@@ -1,3 +1,9 @@
+/**
+ * 工具类封装
+ * 
+ * author: wukong
+ */
+
 const axios = require('axios');
 const ora = require('ora');
 const Log = require('../common/log');

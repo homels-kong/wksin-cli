@@ -1,3 +1,8 @@
+/**
+ * webpack配置
+ * 
+ * author: wukong
+ */
 
 let cwd = process.cwd();
 let path = require('path');

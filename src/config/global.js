@@ -1,6 +1,9 @@
 /**
  * wksin框架项目全局配置
+ * 
+ * author: wukong
  */
+
 const { execSync } = require('child_process');
 const LOG = require('../common/log')
 

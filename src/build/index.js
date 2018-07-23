@@ -1,3 +1,8 @@
+/**
+ * 项目构建封装
+ * 
+ * author: wukong
+ */
 
 const webpack = require('webpack');
 const webpackDefaultConfig = require('../config/webpack');
