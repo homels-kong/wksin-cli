@@ -6,7 +6,8 @@
 
 const Runtime = require('./index');
 const devMiddleware = require('webpack-dev-middleware');
-const webpackHotMiddleware = require("webpack-hot-middleware")
+const webpackHotMiddleware = require("webpack-hot-middleware");
+const historyMiddleware = require('connect-history-api-fallback');
 const express = require('express');
 const app = express();
 const Log = require('../common/log');
@@ -43,12 +44,27 @@ class WksinCore {
                     colors: true
                 },
                 hot: true,
-                logLevel: 'trace'
+                logLevel: 'info'
             });
+            
+            let clientMFS = devMiddlewareIntance.fileSystem;
+            complier.outputFileSystem = clientMFS;
+
             /**
              * 执行中间件
              */
             app.use(devMiddlewareIntance);
+            
+            /**
+             * Vue实现history方式
+             */
+            app.use(historyMiddleware({
+                htmlAcceptHeaders: ['text/html', 'application/xhtml+xml'],
+                rewrites: [
+                    { from: /^\/abc$/, to: '/' }
+                ]
+            }));
+
             /**
              * 监听变化
              */
@@ -60,10 +76,25 @@ class WksinCore {
             /**
              * 热启动
              */
-            app.use(webpackHotMiddleware(complier, {
+            let hotMiddleware = webpackHotMiddleware(complier, {
                 log: console.log,
                 heartbeat: 10 * 1000
-            }));
+            });
+
+            app.use(hotMiddleware);
+            /**
+             * 更改模版重启站点
+             */
+            complier.plugin('compilation', compilation => {
+                compilation.plugin('html-webpack-plugin-after-emit', (data, cb) => {
+
+                    hotMiddleware.publish({
+                        action: 'reload'
+                    });
+
+                    cb();
+                })
+            })
 
             app.listen(3000, () => console.log('App listening on port 3000!'))
         }

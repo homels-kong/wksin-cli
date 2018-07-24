@@ -9,6 +9,7 @@ const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const WebpackHotMiddleware = require('webpack-hot-middleware');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const ENV = process.env.NODE_ENV;
 const webpack = require('webpack');
 
 let cwd = process.cwd();
@@ -16,11 +17,19 @@ let cwd = process.cwd();
 let plusgins = [
     new VueLoaderPlugin(),
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoEmitOnErrorsPlugin(),
-    new MiniCssExtractPlugin({
-        filename: 'css/[name].[hash].css'
-    })
+    new webpack.NoEmitOnErrorsPlugin()
 ]
+
+/**
+ * 生产环境加入 mini-css-extract-plugin 插件
+ */
+if (ENV === 'production') {
+    plusgins.push(
+        new MiniCssExtractPlugin({
+            filename: 'css/[name].[hash].css'
+        })
+    )
+}
 
 /**
  * 支持多个模版渲染
@@ -35,7 +44,8 @@ exports.getWebpackPlugin = (webpackConfig) => {
                 templatePath.forEach(item => {
                     plusgins.push(
                         new HtmlWebpackPlugin({
-                            template: path.resolve(cwd, item)
+                            template: path.resolve(cwd, item),
+                            chunksSortMode: 'none'
                         })
                     )
                 })
