@@ -7,14 +7,16 @@
 let cwd = process.cwd();
 let path = require('path');
 let _ = require('lodash');
+
 const { getWebpackConfig } = require('../common/util');
 const { getLoaders, getResolveLoader} = require('./webpack.base');
-const { getWebpackPlugin } = require('./webpack.plugin')
+const { getWebpackPlugin } = require('./webpack.plugin');
+const NODE_ENV = process.env.NODE_ENV
 
 const hotModuleJs = 'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=10000&reload=true'
 
 let defaultConfig = {
-    mode: 'development',
+    mode: NODE_ENV,
     /**
      * 打包入口
      */
@@ -34,7 +36,7 @@ let defaultConfig = {
      * loader配置
      */
     module: {
-        rules: getLoaders()
+        rules: []
     },
     /**
      * 插件配置
@@ -53,33 +55,46 @@ let defaultConfig = {
         },
     },
 };
+
+/**
+ * 获取webpack默认配置
+ */
+async function getDefaultConfig () {
+    let loaders = await getLoaders();
+
+    defaultConfig.module.rules = loaders;
+    return defaultConfig;
+}
+
 /**
  * 合并项目与默认的webapcck配置
  */
-async function mergeWebpackConfig() {
+async function mergeWebpackConfig () {
     try {
+        let defaultConfig = await getDefaultConfig();
         let projectWebpackConfig = await getWebpackConfig(cwd);
         let plugins = getWebpackPlugin(projectWebpackConfig);
 
         if (plugins) {
             defaultConfig.plugins = plugins;
         }
-        if (projectWebpackConfig) {
-            Object.keys(projectWebpackConfig.webpackBase.entry || {}).forEach(key => {
-                if (Array.isArray(projectWebpackConfig.webpackBase.entry[key])) {
-                    projectWebpackConfig.webpackBase.entry[key] = projectWebpackConfig.webpackBase.entry[key].concat(
+        /**
+         * development 环境下启用HMR
+         */
+        if (projectWebpackConfig && NODE_ENV === 'development') {
+            Object.keys(projectWebpackConfig.base.entry || {}).forEach(key => {
+                if (Array.isArray(projectWebpackConfig.base.entry[key])) {
+                    projectWebpackConfig.base.entry[key] = projectWebpackConfig.base.entry[key].concat(
                         [hotModuleJs]
                     )
                 } else {
-                    projectWebpackConfig.webpackBase.entry[key] = [projectWebpackConfig.webpackBase.entry[key]].concat(
+                    projectWebpackConfig.base.entry[key] = [projectWebpackConfig.base.entry[key]].concat(
                         [hotModuleJs]
                     )
                 }
             })
-
-            return _.merge(defaultConfig, projectWebpackConfig.webpackBase)
         }
-        return defaultConfig;
+        return _.merge(defaultConfig, projectWebpackConfig.base)
     } catch (e) {
         throw new Error(e);
     }

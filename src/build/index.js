@@ -27,7 +27,13 @@ class Runtime {
         Log.info('[wksin] 开始构建项目');
 
         this.spinner = ora('[wksin] 正在构建......').start()
-        this.complier = webpack(this.config);
+        try {
+            this.complier = webpack(this.config);
+        } catch (e) {
+            this.spinner.stop();
+            Log.error('[wksin] 项目构建失败');
+            throw new Error(e);
+        }
 
         return new Promise((resove, reject) => {
             self.complier.run((err, stats) => {
@@ -57,6 +63,8 @@ class Runtime {
                     reject();
                 }
             });
+        }).catch(() => {
+            Log.error('[wksin] 项目构建失败');
         })
     }
     /**

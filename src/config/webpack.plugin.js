@@ -28,9 +28,9 @@ let plusgins = [
  */
 exports.getWebpackPlugin = (webpackConfig) => {
 
-    if (webpackConfig && webpackConfig.webpackPlugin) {
-        if (webpackConfig.webpackPlugin.templatePath) {
-            let templatePath = webpackConfig.webpackPlugin.templatePath;
+    if (webpackConfig && webpackConfig.plugin) {
+        if (webpackConfig.plugin.templatePath) {
+            let templatePath = webpackConfig.plugin.templatePath;
             if (Array.isArray(templatePath)) {
                 templatePath.forEach(item => {
                     plusgins.push(

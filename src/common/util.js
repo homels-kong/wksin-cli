@@ -108,11 +108,13 @@ const tools = {
      * 获取项目默认生成的webpack配置文件
      */
     getWebpackConfig: async (cwd) => {
-       let defaultConfig = null
+       let defaultConfig = {};
        let filePath = path.resolve(cwd, './' + WEBPACK_DEFAULT_CONFIG)
 
        if (fs.existsSync(filePath)) {
            defaultConfig = require(filePath)
+       } else {
+           throw new Error('错误提示：项目缺少配置文件 wksin.config.js ')
        }
 
        return defaultConfig;
