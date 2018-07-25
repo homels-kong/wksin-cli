@@ -5,10 +5,12 @@
  */
 
 const Runtime = require('./index');
+const CWD = process.cwd();
 const devMiddleware = require('webpack-dev-middleware');
 const webpackHotMiddleware = require("webpack-hot-middleware");
 const historyMiddleware = require('connect-history-api-fallback');
 const express = require('express');
+const path = require('path');
 const app = express();
 const Log = require('../common/log');
 
@@ -60,11 +62,10 @@ class WksinCore {
              */
             app.use(historyMiddleware({
                 htmlAcceptHeaders: ['text/html', 'application/xhtml+xml'],
-                rewrites: [
-                    { from: /^\/abc$/, to: '/' }
-                ]
+                disableDotRule: true
             }));
-
+            // 必须在 historyMiddleware 插件之后
+            app.use(express.static(path.resolve(CWD, './dist')));
             /**
              * 监听变化
              */
@@ -84,15 +85,14 @@ class WksinCore {
             app.use(hotMiddleware);
             /**
              * 更改模版重启站点
+             * 这儿有坑，貌似不起作用
              */
             complier.plugin('compilation', compilation => {
                 compilation.plugin('html-webpack-plugin-after-emit', (data, cb) => {
-
                     hotMiddleware.publish({
                         action: 'reload'
                     });
-
-                    cb();
+                    // cb();
                 })
             })
 

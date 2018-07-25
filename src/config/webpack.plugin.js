@@ -45,7 +45,13 @@ exports.getWebpackPlugin = (webpackConfig) => {
                     plusgins.push(
                         new HtmlWebpackPlugin({
                             template: path.resolve(cwd, item),
-                            chunksSortMode: 'none'
+                            chunksSortMode: 'none',
+                            inject: true,
+                            minify: {
+                                removeComments: true,
+                                collapseWhitespace: true,
+                                removeAttributeQuotes: true
+                            }
                         })
                     )
                 })

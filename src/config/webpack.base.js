@@ -31,7 +31,7 @@ exports.getLoaders = async function () {
         test: /\.css$/,
         exclude: /node_modules/,
         use: [
-  　　 　　   "css-loader"
+  　　 　　  "css-loader"
   　　   ]
     };
     /**

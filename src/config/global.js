@@ -36,8 +36,8 @@ exports.PROJECT_PACKAGE_JSON = 'package.json'
  */
 async function getGitConfig(){
     let gitInfo = {
-        author: 'xxx',
-        email: 'xxx@qq.com'
+        author: 'yourname',
+        email: 'yourname@qq.com'
     };
     try {
         let author = await execSync('git config --get user.name');
