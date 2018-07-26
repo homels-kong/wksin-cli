@@ -12,7 +12,10 @@ const historyMiddleware = require('connect-history-api-fallback');
 const express = require('express');
 const path = require('path');
 const app = express();
+const opn = require('opn');
 const Log = require('../common/log');
+const PORT = 3001;
+const PAGE_URI = `http://localhost:${PORT}`;
 
 class WksinCore {
     constructor () {
@@ -41,12 +44,12 @@ class WksinCore {
              */
             let devMiddlewareIntance = devMiddleware(complier, {
                 publicPath: complier.options.output.publicPath,
-                noInfo: true,
+                noInfo: false,
                 stats: {
                     colors: true
                 },
                 hot: true,
-                logLevel: 'info'
+                logLevel: 'silent'
             });
             
             let clientMFS = devMiddlewareIntance.fileSystem;
@@ -64,21 +67,30 @@ class WksinCore {
                 htmlAcceptHeaders: ['text/html', 'application/xhtml+xml'],
                 disableDotRule: true
             }));
+
             // 必须在 historyMiddleware 插件之后
-            app.use(express.static(path.resolve(CWD, './dist')));
+            app.use(express.static('./dist'));
             /**
              * 监听变化
              */
-            devMiddlewareIntance.waitUntilValid(() => {
+            devMiddlewareIntance.waitUntilValid(async () => {
                 Log.info('[wksin] App热启动成功');
-                Log.warn('[wksin] 开始监控文件变化......')
+                Log.warn('[wksin] 开始监控文件变化......');
+                opn(PAGE_URI);
             })
             
             /**
              * 热启动
              */
             let hotMiddleware = webpackHotMiddleware(complier, {
-                log: console.log,
+                log: async (msg) => {
+                    Log.space(1);
+                    Log.info(msg.replace(/^webpack/, '[wksin]'));
+
+                    if (msg.indexOf('built') > 0) {
+                       // await this.runtime.run(complier)
+                    }
+                },
                 heartbeat: 10 * 1000
             });
 
@@ -96,7 +108,7 @@ class WksinCore {
                 })
             })
 
-            app.listen(3000, () => console.log('App listening on port 3000!'))
+            app.listen(PORT, () => console.log(`App listening on port ${PORT}!`))
         }
     }
 }

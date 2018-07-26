@@ -17,7 +17,7 @@ class Runtime {
     /**
      * 运行webpack
      */
-    async run () {
+    async run (complier) {
         let self = this;
         Log.info('[wksin] 开始读取配置文件');
 
@@ -28,7 +28,7 @@ class Runtime {
 
         this.spinner = ora('[wksin] 正在构建......').start()
         try {
-            this.complier = webpack(this.config);
+            this.complier = complier || webpack(this.config);
         } catch (e) {
             this.spinner.stop();
             Log.error('[wksin] 项目构建失败');
@@ -63,7 +63,7 @@ class Runtime {
                     reject();
                 }
             });
-        }).catch(() => {
+        }).catch((e) => {
             Log.error('[wksin] 项目构建失败');
         })
     }

@@ -11,9 +11,9 @@ let _ = require('lodash');
 const { getWebpackConfig } = require('../common/util');
 const { getLoaders, getResolveLoader} = require('./webpack.base');
 const { getWebpackPlugin } = require('./webpack.plugin');
-const NODE_ENV = process.env.NODE_ENV
+const NODE_ENV = process.env.NODE_ENV;
 
-const hotModuleJs = 'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=10000&reload=true'
+const hotModuleJs = 'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=10000&reload=true';
 
 let defaultConfig = {
     mode: NODE_ENV,

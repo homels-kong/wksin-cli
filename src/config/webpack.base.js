@@ -38,9 +38,9 @@ exports.getLoaders = async function () {
      * css-loader 单独处理，在dev环境下单独提取css文件的话，热更新有异常
      */
     if (env === 'production') {
-        cssLoader.use.unshift(MiniCssExtractPlugin.loader)
+        cssLoader.use.unshift(MiniCssExtractPlugin.loader);
     } else {
-        cssLoader.use.unshift("style-loader")
+        cssLoader.use.unshift("style-loader");
     }
 
     loaders.push(cssLoader);
