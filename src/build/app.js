@@ -73,10 +73,18 @@ class WksinCore {
             /**
              * 监听变化
              */
-            devMiddlewareIntance.waitUntilValid(async () => {
-                Log.info('[wksin] App热启动成功');
-                Log.warn('[wksin] 开始监控文件变化......');
-                opn(PAGE_URI);
+            devMiddlewareIntance.waitUntilValid(async (e) => {
+                let errors = e.compilation.errors;
+                if (errors && errors.length > 0) {
+                  Log.warn('[wksin] 编译失败');
+                  errors.forEach(item => {
+                    Log.error(item)
+                  })
+                } else {
+                  Log.info('[wksin] App热启动成功');
+                  Log.warn('[wksin] 开始监控文件变化......');
+                  opn(PAGE_URI);
+                }
             })
             
             /**

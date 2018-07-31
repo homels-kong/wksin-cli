@@ -25,7 +25,8 @@ exports.getLoaders = async function () {
           test: /\.js$/,
           exclude: /node_modules/,
           loader: 'babel-loader'
-    }];
+        }
+    ];
     
     let cssLoader = {
         test: /\.css$/,
