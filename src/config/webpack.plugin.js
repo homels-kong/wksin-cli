@@ -17,7 +17,27 @@ let cwd = process.cwd();
 let plusgins = [
     new VueLoaderPlugin(),
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoEmitOnErrorsPlugin()
+    new webpack.NoEmitOnErrorsPlugin(),
+    new webpack.optimize.SplitChunksPlugin({
+        chunks: "all",
+        minSize: 20000,
+        minChunks: 1,
+        maxAsyncRequests: 5,
+        maxInitialRequests: 3,
+        name: true,
+        cacheGroups: {
+            vendors: {
+                test: /[\\/]node_modules[\\/]/,
+                name: "vendor",
+                chunks: "all"
+            },
+            manifest: {
+                name: "manifest",
+                chunks: "initial",
+                minChunks: 2    
+            }
+        }    
+    })
 ]
 
 /**

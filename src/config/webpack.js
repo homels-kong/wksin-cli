@@ -54,6 +54,17 @@ let defaultConfig = {
             '@': path.resolve(__dirname, './')
         },
     },
+    optimization: {
+        splitChunks: {
+          cacheGroups: {
+            commons: {
+              name: 'commons',
+              chunks: 'initial',
+              minChunks: 2
+            }
+          }
+        }
+    }
 };
 
 /**

@@ -20,31 +20,87 @@ exports.getLoaders = async function () {
           test: /\.vue$/,
           exclude: /node_modules/,
           loader: 'vue-loader'
-        },
-        {
+        }, {
           test: /\.js$/,
           exclude: /node_modules/,
           loader: 'babel-loader'
         }
     ];
-    
+
+    // postcss-loader
+    let postcssLoader = {
+        loader: 'postcss-loader',
+        options: {
+            plugins: [
+                require("autoprefixer")({ browsers: ["last 5 versions"] })
+            ]
+        }
+    };
+
+    // less-loader
+    let lessLoader = {
+        test: /\.less$/,
+        exclude: /node_modules/,
+        use: [
+            'css-loader',
+            postcssLoader,
+            'less-loader'
+        ]
+    };
+
+    // sass-loader
+    let sassLoader = {
+        test: /\.scss$/,
+        exclude: /node_modules/,
+        use: [
+            'css-loader',
+            postcssLoader,
+            'sass-loader'
+        ]
+    };
+
+    // stylus-loader
+    let stylusLoader = {
+        test: /\.styl$/,
+        exclude: /node_modules/,
+        use: [
+            'css-loader',
+            postcssLoader,
+            'stylus-loader'
+        ]
+    };
+
+    // css-loader
     let cssLoader = {
         test: /\.css$/,
         exclude: /node_modules/,
         use: [
-  　　 　　  "css-loader"
+  　　 　　  "css-loader",
+            postcssLoader
   　　   ]
     };
+    
+    /**
+     * loader 集合
+     */
+    const ALL_LOADERS = [cssLoader, lessLoader, sassLoader, lessLoader];
+
     /**
      * css-loader 单独处理，在dev环境下单独提取css文件的话，热更新有异常
      */
     if (env === 'production') {
-        cssLoader.use.unshift(MiniCssExtractPlugin.loader);
+        ALL_LOADERS.forEach(loader => {
+            loader.use.unshift(MiniCssExtractPlugin.loader);
+        })
     } else {
-        cssLoader.use.unshift("style-loader");
+        ALL_LOADERS.forEach(loader => {
+            loader.use.unshift("style-loader");
+        })
     }
-
-    loaders.push(cssLoader);
+    
+    ALL_LOADERS.forEach(loader => { 
+        loaders.push(loader);
+    });
 
     if (webpackConfig && webpackConfig.eslint == true) {
         /**
