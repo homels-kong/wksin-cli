@@ -58,7 +58,8 @@ let defaultConfig = {
      */
     resolve: {
         alias: {
-            '@': path.resolve(__dirname, './')
+            '@': path.resolve(cwd, './'),
+            'client': path.resolve(cwd, './client')
         },
     },
     optimization: {

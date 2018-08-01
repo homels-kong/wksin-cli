@@ -1,6 +1,6 @@
 {
   "name": "wksin",
-  "version": "1.0.13",
+  "version": "1.0.14",
   "description": "基于Nodejs的前端脚手架,通过Json配置快速生成SPA项目",
   "main": "index.js",
   "directories": {
