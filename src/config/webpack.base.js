@@ -83,22 +83,22 @@ exports.getLoaders = async function () {
     /**
      * loader 集合
      */
-    const ALL_LOADERS = [cssLoader, lessLoader, sassLoader, lessLoader];
+    const LOADERS = [cssLoader, lessLoader, sassLoader, lessLoader];
 
     /**
      * css-loader 单独处理，在dev环境下单独提取css文件的话，热更新有异常
      */
     if (env === 'production') {
-        ALL_LOADERS.forEach(loader => {
+        LOADERS.forEach(loader => {
             loader.use.unshift(MiniCssExtractPlugin.loader);
         })
     } else {
-        ALL_LOADERS.forEach(loader => {
+        LOADERS.forEach(loader => {
             loader.use.unshift("style-loader");
         })
     }
     
-    ALL_LOADERS.forEach(loader => { 
+    LOADERS.forEach(loader => { 
         loaders.push(loader);
     });
 

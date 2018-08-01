@@ -8,11 +8,18 @@ let cwd = process.cwd();
 let path = require('path');
 let _ = require('lodash');
 
+const NODE_ENV = process.env.NODE_ENV;
 const { getWebpackConfig } = require('../common/util');
 const { getLoaders, getResolveLoader} = require('./webpack.base');
 const { getWebpackPlugin } = require('./webpack.plugin');
-const NODE_ENV = process.env.NODE_ENV;
-
+/**
+ * css压缩
+ */
+const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
+/**
+ * js压缩
+ */
+const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 const hotModuleJs = 'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=10000&reload=true';
 
 let defaultConfig = {
@@ -63,7 +70,15 @@ let defaultConfig = {
               minChunks: 2
             }
           }
-        }
+        },
+        minimizer: [
+            new OptimizeCSSAssetsPlugin(),
+            new UglifyJsPlugin({
+                cache: true,
+                parallel: true,
+                sourceMap: true
+            }),
+        ]
     }
 };
 
