@@ -1,14 +1,13 @@
 /**
  * webpack基本配置
- * 
  * author: wukong
  */
-
 const path = require('path');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const { getWebpackConfig } = require('../common/util');
 const env = process.env.NODE_ENV;
 const cwd = process.cwd();
+
 /**
  * webpack打包默认的loader
  */
